@@ -23,5 +23,5 @@ jobs:
         polaris_access_token: ${{ secrets.POLARIS_ACCESSTOKEN }}
         polaris_assessment_types: SAST,SCA
         polaris_application_name: chuckaude-hello-java
-        polaris_fixpr_enabled: false
+        polaris_fixpr_enabled: true
         github_token: ${{ secrets.GITHUB_TOKEN }}
