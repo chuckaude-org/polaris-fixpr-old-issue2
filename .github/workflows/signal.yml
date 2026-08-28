@@ -1,0 +1,22 @@
+name: signal
+on:
+  workflow_dispatch:
+    branches: [ main, develop, stage, release ]
+jobs:
+  signal:
+    runs-on: ubuntu-latest
+    env:
+      BRIDGE_POLARIS_SERVERURL: ${{ vars.POLARIS_SERVERURL }}
+      BRIDGE_POLARIS_ACCESSTOKEN: ${{ secrets.POLARIS_ACCESSTOKEN }}
+      BRIDGE_SIGNAL_LLM_URI: ${{ vars.LLM_URL }}
+      BRIDGE_SIGNAL_LLM_KEY: ${{ secrets.LLM_KEY }}
+      BRIDGE_POLARIS_APPLICATION_NAME: chuckaude-hello-java
+      BRIDGE_POLARIS_PROJECT_NAME: ${{ github.event.repository.name }}
+      BRIDGE_POLARIS_BRANCH_NAME: ${{ github.ref_name }}
+    steps:
+    - name: Checkout Source
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - name: Signal Scan
+      run: |
+        curl -fLsS -o bridge.zip ${{ vars.BRIDGECLI_LINUX64 }} && unzip -qo -d ${{ runner.temp }} bridge.zip && rm -f bridge.zip
+        ${{ runner.temp }}/bridge-cli-bundle-linux64/bridge-cli --verbose --stage signal signal.mode=PROJECT signal.platform=polaris
